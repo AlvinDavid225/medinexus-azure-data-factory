@@ -149,10 +149,8 @@
 							}
 						},
 						{
-							"name": "Ingest From Source To Silver_copy1",
+							"name": "Execute Pipeline1",
 							"type": "ExecutePipeline",
-							"state": "Inactive",
-							"onInactiveMarkAs": "Succeeded",
 							"dependsOn": [],
 							"policy": {
 								"secureInput": false
@@ -160,20 +158,10 @@
 							"userProperties": [],
 							"typeProperties": {
 								"pipeline": {
-									"referenceName": "PL_SOURCE_TO_SILVER_INNER",
+									"referenceName": "Silver to GOLD",
 									"type": "PipelineReference"
 								},
-								"waitOnCompletion": true,
-								"parameters": {
-									"table_id": {
-										"value": "@item().table_id",
-										"type": "Expression"
-									},
-									"adf_run_id": {
-										"value": "@pipeline().parameters.adf_run_id",
-										"type": "Expression"
-									}
-								}
+								"waitOnCompletion": true
 							}
 						}
 					]
@@ -183,11 +171,11 @@
 		"parameters": {
 			"source_system": {
 				"type": "string",
-				"defaultValue": "neon_postgres"
+				"defaultValue": "adls_csv"
 			},
 			"adf_run_id": {
 				"type": "string",
-				"defaultValue": "a3"
+				"defaultValue": "csv_test_01"
 			}
 		},
 		"variables": {
