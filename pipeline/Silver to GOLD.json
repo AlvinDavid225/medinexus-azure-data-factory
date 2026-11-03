@@ -86,7 +86,7 @@
 								{
 									"activity": "SILVER TO GOLD",
 									"dependencyConditions": [
-										"Succeeded"
+										"Failed"
 									]
 								}
 							],
