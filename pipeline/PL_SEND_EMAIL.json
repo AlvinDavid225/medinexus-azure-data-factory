@@ -86,6 +86,59 @@
 					"variableName": "body_header",
 					"value": "The ingestion and transformation processes for MediNexus have been completed successfully. The execution status is provided below."
 				}
+			},
+			{
+				"name": "Prepare Email Subject",
+				"description": "For any support reach out to alvindavid225@gmail.com",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Check overall failed count",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "email_subject",
+					"value": {
+						"value": "DEV | @{if(greater(activity('Check overall failed count').output.firstRow.count,0),'FAILED' , 'SUCCESS') | MEDINEXUS MASTER RUN",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Check overall failed count",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "SELECT count(*) as count from ctrl.audit_log where \nadf_run_id =@{pipeline().parameters.adf_run_id}\nand status != 'SUCCESS';",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "AzureSqlTable1",
+						"type": "DatasetReference"
+					}
+				}
 			}
 		],
 		"parameters": {
@@ -95,6 +148,9 @@
 		},
 		"variables": {
 			"body_header": {
+				"type": "String"
+			},
+			"email_subject": {
 				"type": "String"
 			}
 		},
