@@ -3,33 +3,6 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copy data1",
-				"type": "Copy",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "AzureSqlSource",
-						"queryTimeout": "02:00:00",
-						"partitionOption": "None"
-					},
-					"enableStaging": false
-				},
-				"inputs": [
-					{
-						"referenceName": "AzureSqlTable1",
-						"type": "DatasetReference"
-					}
-				]
-			},
-			{
 				"name": "Read all table status",
 				"type": "Lookup",
 				"dependsOn": [],
@@ -83,8 +56,8 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"variableName": "body_header",
-					"value": "The ingestion and transformation processes for MediNexus have been completed successfully. The execution status is provided below."
+					"variableName": "body_footer",
+					"value": "For any support reach out to alvindavid225@gmail.com"
 				}
 			},
 			{
@@ -107,7 +80,7 @@
 				"typeProperties": {
 					"variableName": "email_subject",
 					"value": {
-						"value": "DEV | @{if(greater(activity('Check overall failed count').output.firstRow.count,0),'FAILED' , 'SUCCESS') | MEDINEXUS MASTER RUN",
+						"value": "DEV | @{if(greater(activity('Check overall failed count').output.firstRow.count,0),'FAILED' , 'SUCCESS')} | MEDINEXUS MASTER RUN",
 						"type": "Expression"
 					}
 				}
@@ -139,6 +112,48 @@
 						"type": "DatasetReference"
 					}
 				}
+			},
+			{
+				"name": "Prepare Logic Apps Body",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Prepare Email Subject",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Prepare Email Body Footer",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Prepare Email Body Header",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Read all table status",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "logic_apps_body",
+					"value": {
+						"value": "{\n  \"subject\": \"@{variables('email_subject')}\",\n  \"email_recipients\": \"@{pipeline().globalParameters.email_recipient}\",\n  \"body_header\": \"@{variables('body_header')}\",\n  \"body_footer\": \"@{}\",\n  \"status_table\": []\n}",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
@@ -151,6 +166,12 @@
 				"type": "String"
 			},
 			"email_subject": {
+				"type": "String"
+			},
+			"logic_apps_body": {
+				"type": "String"
+			},
+			"body_footer": {
 				"type": "String"
 			}
 		},
