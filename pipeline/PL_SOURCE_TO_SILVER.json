@@ -147,22 +147,6 @@
 								],
 								"scriptBlockExecutionTimeout": "02:00:00"
 							}
-						},
-						{
-							"name": "Execute Pipeline1",
-							"type": "ExecutePipeline",
-							"dependsOn": [],
-							"policy": {
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"pipeline": {
-									"referenceName": "Silver to GOLD",
-									"type": "PipelineReference"
-								},
-								"waitOnCompletion": true
-							}
 						}
 					]
 				}
