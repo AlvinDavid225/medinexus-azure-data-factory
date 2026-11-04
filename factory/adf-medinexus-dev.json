@@ -1,0 +1,12 @@
+{
+	"name": "adf-medinexus-dev",
+	"properties": {
+		"globalParameters": {
+			"email_recipient": {
+				"type": "string",
+				"value": "alvindavid225@gmail.com"
+			}
+		}
+	},
+	"location": "centralindia"
+}
