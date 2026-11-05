@@ -10,7 +10,16 @@
 				"type": "string",
 				"value": "https://prod-14.centralindia.logic.azure.com:443/workflows/592ca6ba75744fd8ad05569f2be4f044/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=RolnMQV8EbqOVHY8iwMUaBQdQ5PR7afBIDr7Hfb0HFI"
 			}
+		},
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
 		}
 	},
-	"location": "centralindia"
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "b849bc23-442a-46a5-bc06-c92fc5e5a90c",
+		"tenantId": "fc374229-b9b4-48fd-b89c-c8e1ab23b8fe"
+	}
 }

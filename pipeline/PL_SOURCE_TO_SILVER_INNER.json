@@ -480,6 +480,8 @@
 				"type": "String"
 			}
 		},
-		"annotations": []
-	}
+		"annotations": [],
+		"lastPublishTime": "2026-11-03T09:54:58Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }
